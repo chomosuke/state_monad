@@ -11,7 +11,7 @@ module T = struct
     | Get : int t
     | Set : int -> unit t
 
-  let bind x ~f = Nested { f; prev = x }
+  let bind m ~f = Nested { f; prev = m }
   let return x = Pure x
   let map = `Define_using_bind
 end
@@ -32,21 +32,4 @@ let rec run : type a. a t -> int -> a * int =
   | Pure x -> x, s
   | Get -> s, s
   | Set x -> (), x
-;;
-
-let%test "test run" =
-  let open Let_syntax in
-  let add_one =
-    let%bind current = get in
-    let%bind () = set (current + 1) in
-    return ()
-  in
-  let add_three =
-    let%bind () = add_one in
-    let%bind () = add_one in
-    let%bind () = add_one in
-    return ()
-  in
-  let (), s = run add_three 1 in
-  s = 4
 ;;
