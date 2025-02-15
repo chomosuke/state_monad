@@ -1,0 +1,4 @@
+(test
+ (name test_state_monad)
+ (libraries state_monad core)
+ (preprocess (pps ppx_jane)))

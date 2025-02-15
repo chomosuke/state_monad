@@ -1,0 +1,4 @@
+(executable
+ (public_name state_monad)
+ (name main)
+ (libraries state_monad))
