@@ -23,7 +23,8 @@ let get = Get
 let set s = Set s
 
 let rec run : type a. a t -> int -> a * int =
-  fun m s ->
+  fun m ->
+  fun s ->
   match m with
   | Nested { f; prev } ->
     let x, s = run prev s in
