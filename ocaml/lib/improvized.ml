@@ -24,13 +24,13 @@ let set s = Set s
 
 let rec run : type a. a t -> int -> a * int =
   fun m ->
-  fun s ->
   match m with
   | Nested { f; prev } ->
-    let x, s = run prev s in
-    let m = f x in
-    run m s
-  | Pure x -> x, s
-  | Get -> s, s
-  | Set x -> (), x
+    fun s ->
+      let x, s = run prev s in
+      let m = f x in
+      run m s
+  | Pure x -> fun s -> x, s
+  | Get -> fun s -> s, s
+  | Set x -> fun _s -> (), x
 ;;
