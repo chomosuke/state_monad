@@ -1,7 +1,7 @@
 open Core
 
 module T = struct
-  type 'a t = int -> 'a * int
+  type ('a, 's) t = 's -> 'a * 's
 
   let bind m ~f =
     fun s ->
@@ -15,7 +15,7 @@ module T = struct
 end
 
 include T
-include Monad.Make (T)
+include Monad.Make2 (T)
 
 let get = fun s -> s, s
 let set x = fun _ -> (), x

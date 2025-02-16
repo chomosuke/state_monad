@@ -1,15 +1,15 @@
 open Core
 
 module T = struct
-  type 'a t =
+  type ('a, 's) t =
     | Nested :
-        { f : 'b -> 'a t
-        ; prev : 'b t
+        { f : 'b -> ('a, 's) t
+        ; prev : ('b, 's) t
         }
-        -> 'a t
+        -> ('a, 's) t
     | Pure of 'a
-    | Get : int t
-    | Set : int -> unit t
+    | Get : ('s, 's) t
+    | Set : 's -> (unit, 's) t
 
   let bind m ~f = Nested { f; prev = m }
   let return x = Pure x
@@ -17,12 +17,12 @@ module T = struct
 end
 
 include T
-include Monad.Make (T)
+include Monad.Make2 (T)
 
 let get = Get
 let set s = Set s
 
-let rec run : type a. a t -> int -> a * int =
+let rec run : type a s. (a, s) t -> s -> a * s =
   fun m s ->
   match m with
   | Nested { f; prev } ->
